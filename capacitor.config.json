@@ -1,0 +1,9 @@
+{
+  "appId": "io.ionic.starter",
+  "appName": "agenda-ccb-new",
+  "bundledWebRuntime": false,
+  "npmClient": "npm",
+  "webDir": "build",
+  "cordova": {},
+  "linuxAndroidStudioPath": "/home/mahelder/Documentos/dev/android-studio/bin/studio.sh"
+}

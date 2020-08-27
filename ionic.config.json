@@ -1,0 +1,7 @@
+{
+  "name": "agenda-ccb-new",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react"
+}
