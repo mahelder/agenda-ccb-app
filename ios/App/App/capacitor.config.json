@@ -1,9 +1,0 @@
-{
-  "appId": "br.org.ccb",
-  "appName": "agenda-ccb-new",
-  "bundledWebRuntime": false,
-  "npmClient": "npm",
-  "webDir": "build",
-  "cordova": {},
-  "linuxAndroidStudioPath": "/home/mahelder/Documentos/dev/android-studio/bin/studio.sh"
-}
