@@ -39,6 +39,7 @@ class Ministers extends React.Component<{}, State> {
       searchbar: null,
       open: false,
     }
+    this.closeMinisterDetails = this.closeMinisterDetails.bind(this);
   }
 
   async ionViewWillEnter() {
@@ -57,6 +58,10 @@ class Ministers extends React.Component<{}, State> {
       });
     })
     this.setState({ ministers, ministersShown: ministers, loading: false });
+  }
+
+  closeMinisterDetails() {
+    this.setState({open: false});
   }
 
   setActives(cargo: string){
@@ -122,7 +127,7 @@ class Ministers extends React.Component<{}, State> {
         </IonHeader>
         <IonContent>
           <IonLoading isOpen={this.state.loading}></IonLoading>
-          <MinisterDetails open={this.state.open} details={this.state.details}/>
+          <MinisterDetails open={this.state.open} details={this.state.details} close={this.closeMinisterDetails}/>
           <IonSearchbar placeholder="Busque por nome" onIonChange={(e) => this.search(e)}></IonSearchbar>
           
           <IonList>

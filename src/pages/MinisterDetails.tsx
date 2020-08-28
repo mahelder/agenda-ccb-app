@@ -15,61 +15,50 @@ import {
 type State = {
   details: { [index: string]: any },
   open: boolean,
+  close: Function,
 };
 
-class MinisterDetails extends React.Component<State, State> {
-
-  constructor(props: any) {
-    super(props);
-    this.state = {
-      open: props.open,
-      details: props.details
-    }
-  }
-
-  componentWillReceiveProps(nextProps: any){
-    this.setState({open: nextProps.open, details: nextProps.details})
-  }  
+class MinisterDetails extends React.Component<State, {}> {
 
   render() {
     return (
         <IonModal
-        isOpen={this.state.open}
+        isOpen={this.props.open}
         cssClass='my-custom-class'            
       >
         <IonHeader>
           <IonToolbar>
-            <IonTitle>{this.state.details.nome}</IonTitle>
+            <IonTitle>{this.props.details.nome}</IonTitle>
           </IonToolbar>
         </IonHeader>
         <IonContent>
-          {this.state.details.hasOwnProperty("telefone1") &&
+          {this.props.details.hasOwnProperty("telefone1") &&
             <IonItem>
-                Telefone 1: {this.state.details.telefone1}
+                Telefone 1: {this.props.details.telefone1}
             </IonItem>
           }
           
-          {this.state.details.hasOwnProperty("telefone2") &&
+          {this.props.details.hasOwnProperty("telefone2") &&
             <IonItem>
-                Telefone 2: {this.state.details.telefone2}
+                Telefone 2: {this.props.details.telefone2}
             </IonItem>
           }
 
-          {this.state.details.hasOwnProperty("comum") &&
+          {this.props.details.hasOwnProperty("comum") &&
             <IonItem>
-                Comum Congregação: {this.state.details.comum}
+                Comum Congregação: {this.props.details.comum}
             </IonItem>
           }
           
-          {this.state.details.hasOwnProperty("email") &&
+          {this.props.details.hasOwnProperty("email") &&
             <IonItem>
-                Email: {this.state.details.email}
+                Email: {this.props.details.email}
             </IonItem>
           }
 
           <IonGrid>
             <IonRow>
-              <IonCol size="12"><IonButton expand="block" onClick={() => this.setState({open: false})}>Fechar</IonButton></IonCol>
+              <IonCol size="12"><IonButton expand="block" onClick={() => this.props.close()}>Fechar</IonButton></IonCol>
             </IonRow>
           </IonGrid>
         </IonContent>

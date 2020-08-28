@@ -1,7 +1,5 @@
 import React from 'react';
 import {
-  IonBackButton,
-  IonButtons,
   IonHeader,
   IonPage,
   IonToolbar,
@@ -59,11 +57,16 @@ class ChurchDetails extends React.Component<{}, State> {
       details: {},
       open: false,
     }
+    this.closeMinisterDetails = this.closeMinisterDetails.bind(this);
   }
 
   async ionViewWillEnter() {
     await this.loadChurch(this.state.id);
     this.loadMinisters();
+  }
+
+  closeMinisterDetails() {
+    this.setState({open: false});
   }
 
   async loadChurch(key: string) {
@@ -77,7 +80,6 @@ class ChurchDetails extends React.Component<{}, State> {
   async loadMinisters() {
     let church = this.state.church;
     let ministers = this.state.ministers;
-    console.log(church.name);
     let ref = await firebase.database().ref(`/lista-telefones`).once('value');
     let keys = ["anciaes", "diaconos", "cooperadores-franca", "cooperadores-regiao", "cooperadores-rjm-franca", "cooperadores-rjm-regiao", "encarregados-locais-franca", "encarregados-locais-regiao", "encarregados-regionais", "examinadoras"];
     keys.forEach(key => {
@@ -130,7 +132,7 @@ class ChurchDetails extends React.Component<{}, State> {
         </IonHeader>
         <IonContent>
           <IonLoading isOpen={this.state.loading}></IonLoading>
-          <MinisterDetails open={this.state.open} details={this.state.details} />
+          <MinisterDetails open={this.state.open} details={this.state.details} close={this.closeMinisterDetails}/>
           <IonList lines="none">
             <IonItem>
               <IonCard>
