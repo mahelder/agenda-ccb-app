@@ -1,6 +1,6 @@
 {
   "appId": "br.org.ccb",
-  "appName": "agenda-ccb-new",
+  "appName": "Agenda Ministerial",
   "bundledWebRuntime": false,
   "npmClient": "npm",
   "webDir": "build",

@@ -56,6 +56,12 @@ class MinisterDetails extends React.Component<State, {}> {
             </IonItem>
           }
 
+          {this.props.details.hasOwnProperty("cargo") &&
+            <IonItem>
+                Cargo: {this.props.details.cargo}
+            </IonItem>
+          }
+
           <IonGrid>
             <IonRow>
               <IonCol size="12"><IonButton expand="block" onClick={() => this.props.close()}>Fechar</IonButton></IonCol>

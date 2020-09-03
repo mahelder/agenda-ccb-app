@@ -61,7 +61,7 @@ class App extends React.Component<any, State> {
           .once("value", (auth) => {
             if (auth.val()["email"] === null) {
               user.delete(); 
-            } else if (!auth.val()["isAuthenticaded"]) {
+            } else if (auth.val()["isAuthenticated"] === false) {
               firebase.database().ref(`/users/${user.uid}/isAuthenticated`).set(true);
               _this.setState({ isAuthenticated: true });
             }

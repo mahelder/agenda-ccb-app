@@ -1,6 +1,6 @@
 {
   "name": "agenda-ccb-new",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "private": true,
   "dependencies": {
     "@capacitor/android": "^2.1.2",
@@ -55,5 +55,5 @@
   "devDependencies": {
     "@capacitor/cli": "2.1.2"
   },
-  "description": "An Ionic project"
+  "description": "Agenda Ministerial Franca - SP"
 }

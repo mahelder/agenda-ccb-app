@@ -124,7 +124,7 @@ class Churches extends React.Component<any, State> {
     }
 
     if (filters.events.includes("rehearsals")){
-      churchesFiltered = churchesFiltered.filter(i => i.rehearsals.weekDay.includes(filters.days))
+      churchesFiltered = churchesFiltered.filter(i => i.rehearsals !== undefined && i.rehearsals.weekDay.includes(filters.days));
     }
 
     churchesFiltered = churchesFiltered.filter(i => i.name.toLowerCase().includes(filters.search))

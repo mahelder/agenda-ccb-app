@@ -52,7 +52,7 @@ class Agendas extends React.Component<{}, State> {
   }
 
   async loadAgendas() {
-    let agendas = await firebase.database().ref(`/agendas`).once('value');
+    let agendas = await firebase.database().ref(`/agendas/ministeriais`).once('value');
     this.addListAgendas(agendas);
   }
 
@@ -102,17 +102,20 @@ class Agendas extends React.Component<{}, State> {
     let html: any[] = [];
     let agendas = this.state.agendas;
     for (let agenda in agendas[month]) {
-      html.push(
-        <IonItem 
-          key={agenda} 
-          style={(!this.state.activeMonths.includes(month)) ? { "display": 'None' } : { "display": 'inherit' }}
-          onClick={() => this.setState({open: true, details: agendas[month][agenda]})}  
-        >
-          <IonLabel>
-            {moment(agendas[month][agenda].date).format("DD/MM/YYYY")} - {agendas[month][agenda].time} - {agendas[month][agenda].name}
-          </IonLabel>
-        </IonItem>
-      )
+      if (agenda !== "description"){
+        html.push(
+          <IonItem 
+            key={agenda} 
+            style={(!this.state.activeMonths.includes(month)) ? { "display": 'None' } : { "display": 'inherit' }}
+            onClick={() => this.setState({open: true, details: agendas[month][agenda]})}  
+          >
+            <IonLabel>
+              {moment(agendas[month][agenda].date).format("DD/MM/YYYY")} - {agendas[month][agenda].time} - {agendas[month][agenda].name}
+            </IonLabel>
+          </IonItem>
+        );
+      }
+      
     }
     return html;
   }
