@@ -11,7 +11,6 @@ import {
   IonTitle,
   IonToolbar,
   IonLoading,
-  IonSpinner,
   IonButton,
   IonIcon,
   IonImg,
@@ -45,7 +44,6 @@ class Churches extends React.Component<any, State> {
       loading: true,
       showModal: false
     }
-    this.getImage = this.getImage.bind(this);
     this.search = this.search.bind(this);
   }
 
@@ -60,24 +58,12 @@ class Churches extends React.Component<any, State> {
 
   async addListChurches(entity: any) {
     let churches = this.state.churches;
-    let getImage = this.getImage;
     entity.forEach((element: any) => {
       churches[element.key] = element.val()
       churches[element.key]['key'] = element.key
-      churches[element.key]['loadingImg'] = true
-      getImage(element.val()['imgUrl'], element.key)
     });
 
     this.setState({ churches, churchesShown: churches, loading: false });
-  }
-
-  async getImage(ref: string, key: string) {
-    let storage = firebase.storage();
-    let path = await storage.ref(ref).getDownloadURL();
-    let churches = this.state.churches;
-    churches[key]['imgUrl'] = path;
-    churches[key]['loadingImg'] = false;
-    this.setState({ churches, churchesShown: churches });
   }
 
   createListItems() {
@@ -88,14 +74,7 @@ class Churches extends React.Component<any, State> {
         <IonItem href={`/churches/${church}`} key={church}>
           <IonCard className="welcome-card">
 
-            {churches[church].loadingImg &&
-              <div className="spin">
-                <IonSpinner />
-              </div>
-            }
-            {!churches[church].loadingImg &&
-              <IonImg className="main-img" src={churches[church].imgUrl} />
-            }
+            <IonImg className="main-img" src={churches[church].imgUrl} />
 
             <IonCardHeader>
               <IonCardTitle>{churches[church].place} - {churches[church].name}</IonCardTitle>

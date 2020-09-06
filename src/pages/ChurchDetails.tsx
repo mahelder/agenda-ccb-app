@@ -12,7 +12,6 @@ import {
   IonItemDivider,
   IonImg,
   IonCard,
-  IonSpinner,
   IonLoading,
   withIonLifeCycle
 } from '@ionic/react';
@@ -72,9 +71,7 @@ class ChurchDetails extends React.Component<{}, State> {
   async loadChurch(key: string) {
     let church = await firebase.database().ref(`/churches/${key}`).once('value');
     let churchDetail = church.val();
-    churchDetail['loadingImg'] = true;
-    this.getImage(churchDetail);
-    this.setState({ church: churchDetail });
+    this.setState({ church: churchDetail, loading: false });
   }
 
   async loadMinisters() {
@@ -98,15 +95,6 @@ class ChurchDetails extends React.Component<{}, State> {
     });
 
     this.setState({ ministers });
-  }
-
-  async getImage(entity: any) {
-    let storage = firebase.storage();
-    let path = await storage.ref(entity.imgUrl).getDownloadURL();
-    let church = this.state.church;
-    church['imgUrl'] = path;
-    church['loadingImg'] = false;
-    this.setState({ church, loading: false });
   }
 
   createListMinisters() {    
@@ -136,14 +124,7 @@ class ChurchDetails extends React.Component<{}, State> {
           <IonList lines="none">
             <IonItem>
               <IonCard>
-                {this.state.church.loadingImg &&
-                  <div className="spin">
-                    <IonSpinner />
-                  </div>
-                }
-                {!this.state.church.loadingImg &&
-                  <IonImg className="img-details" src={this.state.church.imgUrl} />
-                }
+                <IonImg className="img-details" src={this.state.church.imgUrl} />
               </IonCard>
             </IonItem>
 
