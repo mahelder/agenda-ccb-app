@@ -1,5 +1,5 @@
 import React from 'react';
-import { Redirect, Route, Link } from 'react-router-dom';
+import { Redirect, Route } from 'react-router-dom';
 import {
   IonApp,
   IonRouterOutlet,
@@ -72,11 +72,7 @@ class App extends React.Component<any, State> {
           });
         
       } else {
-        _this.setState({ isAuthenticated: false })
-        let link: HTMLElement | null = document.getElementById("login")
-        if (link) {
-          link.click()
-        }
+        _this.setState({ isAuthenticated: false });
       }
     })
   }
@@ -94,8 +90,6 @@ class App extends React.Component<any, State> {
               <Route path="/login" component={Login} />
               <Route path="/" render={() => <Redirect to={this.state.isAuthenticated ? "/churches" : "/login"} />} exact={true} />
             </IonRouterOutlet>
-
-            <Link id="login" to="/login"></Link>
 
             <IonTabBar slot="bottom">
               <IonTabButton tab="churches" href="/churches">

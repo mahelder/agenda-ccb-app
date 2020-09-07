@@ -42,7 +42,6 @@ class Login extends React.Component<any, State> {
         try {
             await firebase.auth().signInWithEmailAndPassword(email, password)
             this.setState({ loading: false })
-            window.location.href = '/'
         } catch (error) {
             this.setState({ errors: "Erro de autenticação. Verifique sua conexão, usuário e senha."})
         }        

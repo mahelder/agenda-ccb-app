@@ -42,22 +42,23 @@ class Ministers extends React.Component<{}, State> {
     this.closeMinisterDetails = this.closeMinisterDetails.bind(this);
   }
 
-  async ionViewWillEnter() {
+  ionViewWillEnter() {
     this.loadVolunteers();
   }
 
-  async loadVolunteers() {
+  loadVolunteers() {
     var ministers: {[k: string]: any} = {};
-    let ref = await firebase.database().ref('/lista-telefones').once('value');
-    ref.forEach((cargo: any) => {
-      ministers[cargo.key] = {"descricao": cargo.val()["descricao"], "voluntarios": []};
-      cargo.forEach((voluntary: any) => {
-        if(voluntary.val() !== cargo.val()["descricao"]){
-          ministers[cargo.key]["voluntarios"].push(voluntary);
-        }
+    firebase.database().ref('/lista-telefones').on('value', (ref) => {
+      ref.forEach((cargo: any) => {
+        ministers[cargo.key] = {"descricao": cargo.val()["descricao"], "voluntarios": []};
+        cargo.forEach((voluntary: any) => {
+          if(voluntary.val() !== cargo.val()["descricao"]){
+            ministers[cargo.key]["voluntarios"].push(voluntary);
+          }
+        });
       });
-    })
-    this.setState({ ministers, ministersShown: ministers, loading: false });
+      this.setState({ ministers, ministersShown: ministers, loading: false });
+    });
   }
 
   closeMinisterDetails() {

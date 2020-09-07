@@ -47,13 +47,12 @@ class Churches extends React.Component<any, State> {
     this.search = this.search.bind(this);
   }
 
-  async ionViewWillEnter() {
+  ionViewWillEnter() {
     this.loadChurches();
   }
 
-  async loadChurches() {
-    let churches = await firebase.database().ref(`/churches`).once('value');
-    this.addListChurches(churches);
+  loadChurches() {
+    firebase.database().ref(`/churches`).on('value', (churches) => this.addListChurches(churches));
   }
 
   async addListChurches(entity: any) {
@@ -71,7 +70,7 @@ class Churches extends React.Component<any, State> {
     let churches = this.state.churchesShown;
     for (let church in churches) {
       html.push(
-        <IonItem href={`/churches/${church}`} key={church}>
+        <IonItem routerLink={`/churches/${church}`} key={church}>
           <IonCard className="welcome-card">
 
             <IonImg className="main-img" src={churches[church].imgUrl} />

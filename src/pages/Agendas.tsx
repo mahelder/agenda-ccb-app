@@ -47,13 +47,12 @@ class Agendas extends React.Component<{}, State> {
     this.createListItems = this.createListItems.bind(this);
   }
 
-  async ionViewWillEnter() {
+  ionViewWillEnter() {
     this.loadAgendas();
   }
 
-  async loadAgendas() {
-    let agendas = await firebase.database().ref(`/agendas/ministeriais`).once('value');
-    this.addListAgendas(agendas);
+  loadAgendas() {
+    firebase.database().ref(`/agendas/ministeriais`).on('value', (agendas) => this.addListAgendas(agendas));
   }
 
   addListAgendas(entity: any) {
