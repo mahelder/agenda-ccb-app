@@ -1,5 +1,6 @@
 import React from 'react';
 import { Redirect, Route } from 'react-router-dom';
+import { Device } from '@ionic-native/device';
 import {
   IonApp,
   IonRouterOutlet,
@@ -56,13 +57,16 @@ class App extends React.Component<any, State> {
     let _this = this;
     firebase.auth().onAuthStateChanged(function (user) {
       if (user) {
+        let uid = Device.uuid;
         firebase.database()
           .ref(`/users/${user.uid}`)
           .once("value", (auth) => {
             if (auth.val()["email"] === null) {
               user.delete(); 
             } else if (auth.val()["isAuthenticated"] === false) {
-              firebase.database().ref(`/users/${user.uid}/isAuthenticated`).set(true);
+              firebase.database().ref(`/users/${user.uid}/isAuthenticated`).set(uid);
+              _this.setState({ isAuthenticated: true });
+            } else if (auth.val()["isAuthenticated"] === uid) {
               _this.setState({ isAuthenticated: true });
             }
             else {

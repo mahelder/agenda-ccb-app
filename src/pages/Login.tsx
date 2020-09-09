@@ -40,10 +40,12 @@ class Login extends React.Component<any, State> {
         this.setState({ loading: true })
         let { email, password } = this.state;
         try {
-            await firebase.auth().signInWithEmailAndPassword(email, password)
-            this.setState({ loading: false })
+            await firebase.auth().signInWithEmailAndPassword(email, password);
+            setTimeout(() =>{
+                this.setState({ errors: "Esse usuário já está autenticado em outro dispositivo.", loading: false});
+           }, 5000);
         } catch (error) {
-            this.setState({ errors: "Erro de autenticação. Verifique sua conexão, usuário e senha."})
+            this.setState({ errors: "Erro de autenticação. Verifique sua conexão, usuário e senha.", loading: false});
         }        
     }
 

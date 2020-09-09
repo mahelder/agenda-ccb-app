@@ -1499,6 +1499,13 @@
   dependencies:
     "@types/cordova" latest
 
+"@ionic-native/device@^5.28.0":
+  version "5.28.0"
+  resolved "https://registry.yarnpkg.com/@ionic-native/device/-/device-5.28.0.tgz#4ff8ab987a0869df03476b6f9f38881078fbadbe"
+  integrity sha512-9uPnXz4McQnrEDjGLRUJg133maPCDMRjpXSMJmeO2pizKTeeQGadfp63EDUPDCromBXzkhF7GqDxDbPCgP3TWg==
+  dependencies:
+    "@types/cordova" latest
+
 "@ionic/core@4.11.10":
   version "4.11.10"
   resolved "https://registry.yarnpkg.com/@ionic/core/-/core-4.11.10.tgz#1aa5f2e31b8d0c741471af9c272964c34155ab5a"
@@ -3746,6 +3753,11 @@ copy-descriptor@^0.1.0:
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/copy-descriptor/-/copy-descriptor-0.1.1.tgz#676f6eb3c39997c2ee1ac3a924fd6124748f578d"
   integrity sha1-Z29us8OZl8LuGsOpJP1hJHSPV40=
+
+cordova-plugin-device@^2.0.3:
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/cordova-plugin-device/-/cordova-plugin-device-2.0.3.tgz#c2b41b7efd0455dd097f89356d85bfdd5dadeb0f"
+  integrity sha512-Jb3V72btxf3XHpkPQsGdyc8N6tVBYn1vsxSFj43fIz9vonJDUThYPCJJHqk6PX6N4dJw6I4FjxkpfCR4LDYMlw==
 
 core-js-compat@^3.6.2:
   version "3.6.5"
