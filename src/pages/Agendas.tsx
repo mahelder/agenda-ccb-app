@@ -102,13 +102,15 @@ class Agendas extends React.Component<{}, State> {
     let agendas = this.state.agendas;
     for (let agenda in agendas[month]) {
       if (agenda !== "description"){
+        let diff = moment(agendas[month][agenda].date).diff(moment(), 'days')
+        let color = ((diff > -1) && (diff < 4)) ? "danger" : "";
         html.push(
           <IonItem 
             key={agenda} 
             style={(!this.state.activeMonths.includes(month)) ? { "display": 'None' } : { "display": 'inherit' }}
             onClick={() => this.setState({open: true, details: agendas[month][agenda]})}  
           >
-            <IonLabel>
+            <IonLabel color={color}>
               {moment(agendas[month][agenda].date).format("DD/MM/YYYY")} - {agendas[month][agenda].time} - {agendas[month][agenda].name}
             </IonLabel>
           </IonItem>

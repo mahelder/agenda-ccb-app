@@ -22,6 +22,7 @@ type State = {
   ministersShown: { [index: string]: any },
   details: { [index: string]: any },
   actives: any[],
+  listKeys: any[],
   loading: boolean,
   searchbar: null,
   open: boolean,
@@ -35,6 +36,7 @@ class Ministers extends React.Component<{}, State> {
       ministersShown: {},
       details: {},
       actives: [],
+      listKeys: [],
       loading: true,
       searchbar: null,
       open: false,
@@ -48,16 +50,24 @@ class Ministers extends React.Component<{}, State> {
 
   loadVolunteers() {
     var ministers: {[k: string]: any} = {};
+    var listKeys: any[] = [];
     firebase.database().ref('/lista-telefones').on('value', (ref) => {
       ref.forEach((cargo: any) => {
         ministers[cargo.key] = {"descricao": cargo.val()["descricao"], "voluntarios": []};
+        listKeys.push({"descricao": cargo.val()["descricao"], "key": cargo.key});
+
         cargo.forEach((voluntary: any) => {
           if(voluntary.val() !== cargo.val()["descricao"]){
             ministers[cargo.key]["voluntarios"].push(voluntary);
           }
         });
       });
-      this.setState({ ministers, ministersShown: ministers, loading: false });
+
+      listKeys.sort(function(a,b) {
+          return (a.descricao > b.descricao) ? 1 : ((b.descricao > a.descricao) ? -1 : 0)
+      });
+
+      this.setState({ ministers, ministersShown: ministers, listKeys, loading: false });
     });
   }
 
@@ -79,18 +89,21 @@ class Ministers extends React.Component<{}, State> {
   }
 
   createList() {
-    let html = []
+    let html: any[] = []
     let ministers = this.state.ministersShown;
-    for (let key in ministers) {
-      html.push(
-        <IonItemGroup key={key}>
-          <IonItemDivider onClick={() => this.setActives(key)}>
-            <IonLabel>{ministers[key]["descricao"]}</IonLabel>
-          </IonItemDivider>
-          {this.createListItems(ministers[key]["voluntarios"], key)}
-        </IonItemGroup>
-      )
-    }
+    let listKeys = this.state.listKeys;
+    listKeys.forEach((x) => {
+      if(ministers[x.key] !== undefined){
+        html.push(
+          <IonItemGroup key={x.key}>
+            <IonItemDivider onClick={() => this.setActives(x.key)}>
+              <IonLabel>{ministers[x.key]["descricao"]}</IonLabel>
+            </IonItemDivider>
+            {this.createListItems(ministers[x.key]["voluntarios"], x.key)}
+          </IonItemGroup>
+        )
+      }
+    });
     return html;
   }
 
