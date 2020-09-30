@@ -111,6 +111,11 @@ class Ministers extends React.Component<{}, State> {
     let html: any[] = [];
     let style = (!this.state.actives.includes(key)) ? {"display": 'None'} : {"display": 'inherit'};
     let _this = this;
+
+    voluntarios.sort(function(a: any, b: any) {
+      return (a.val()["nome"] > b.val()["nome"]) ? 1 : ((b.val()["nome"] > a.val()["nome"]) ? -1 : 0)
+    });
+    
     voluntarios.forEach(function (x: any) {
       html.push(
         <IonItem key={x.key} style={style} onClick={() => _this.setState({open: true, details: x.val()})}>
