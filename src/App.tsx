@@ -11,6 +11,7 @@ import {
 import { IonReactRouter } from '@ionic/react-router';
 import { person, home, calendar } from 'ionicons/icons';
 import Churches from './pages/Churches';
+import MinistersSections from './pages/MinistersSections';
 import Ministers from './pages/Ministers';
 import Agendas from './pages/Agendas';
 import ChurchDetails from './pages/ChurchDetails';
@@ -45,7 +46,8 @@ class App extends React.Component<any, any> {
             <IonRouterOutlet>
               <Route path="/churches" component={Churches} exact={true} />
               <Route path="/churches/:id" component={ChurchDetails} />
-              <Route path="/ministers" component={Ministers} exact={true} />
+              <Route path="/ministers" component={MinistersSections} exact={true} />
+              <Route path="/ministers/:section" component={Ministers} exact={true} />
               <Route path="/agendas" component={Agendas} exact={true} />
               <Route path="/" render={() => <Redirect to="/churches"/>} exact={true} />
             </IonRouterOutlet>

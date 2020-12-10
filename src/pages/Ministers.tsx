@@ -26,6 +26,7 @@ type State = {
   loading: boolean,
   searchbar: null,
   open: boolean,
+  section: string,
 };
 class Ministers extends React.Component<{}, State> {
 
@@ -40,27 +41,30 @@ class Ministers extends React.Component<{}, State> {
       loading: true,
       searchbar: null,
       open: false,
+      section: props.match.params.section
     }
     this.closeMinisterDetails = this.closeMinisterDetails.bind(this);
   }
 
   ionViewWillEnter() {
-    this.loadVolunteers();
+    this.loadVolunteers(this.state.section);
   }
 
-  loadVolunteers() {
+  loadVolunteers(section: string) {
     var ministers: {[k: string]: any} = {};
     var listKeys: any[] = [];
-    firebase.database().ref('/lista-telefones').on('value', (ref) => {
+    firebase.database().ref(`/lista-telefones/${section}`).on('value', (ref) => {
       ref.forEach((cargo: any) => {
-        ministers[cargo.key] = {"descricao": cargo.val()["descricao"], "voluntarios": []};
-        listKeys.push({"descricao": cargo.val()["descricao"], "key": cargo.key});
+        if(cargo.key !== "descricao"){
+          ministers[cargo.key] = {"descricao": cargo.val()["descricao"], "voluntarios": []};
+          listKeys.push({"descricao": cargo.val()["descricao"], "key": cargo.key});
 
-        cargo.forEach((voluntary: any) => {
-          if(voluntary.val() !== cargo.val()["descricao"]){
-            ministers[cargo.key]["voluntarios"].push(voluntary);
-          }
-        });
+          cargo.forEach((voluntary: any) => {
+            if(voluntary.val() !== cargo.val()["descricao"]){
+              ministers[cargo.key]["voluntarios"].push(voluntary);
+            }
+          });
+        }
       });
 
       listKeys.sort(function(a,b) {

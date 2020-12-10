@@ -30,18 +30,18 @@ type State = {
 };
 
 const ministersPtBr = {
-  "anciaes": "Ancião",
-  "diaconos": "Diácono",
-  "cooperadores-franca": "Cooperador",
-  "cooperadores-regiao": "Cooperador",
-  "cooperadores-rjm-franca": "Cooperador RJM",
-  "cooperadores-rjm-regiao": "Cooperador RJM",
-  "encarregados-regionais": "Encarregado Regional",
-  "encarregados-locais-franca": "Encarregado Local",
-  "encarregados-locais-regiao": "Encarregado Local",
-  "examinadoras": "Examinadora"
+  "anciaes": {"descricao": "Ancião", "secao": "ministerio"},
+  "diaconos": {"descricao": "Diácono", "secao": "ministerio"},
+  "cooperadores-franca": {"descricao": "Cooperador", "secao": "ministerio"},
+  "cooperadores-regiao": {"descricao": "Cooperador", "secao": "ministerio"},
+  "cooperadores-rjm-franca": {"descricao": "Cooperador RJM", "secao": "ministerio"},
+  "cooperadores-rjm-regiao": {"descricao": "Cooperador RJM", "secao": "ministerio"},
+  "encarregados-regionais": {"descricao": "Encarregado Regional", "secao": "musica"},
+  "encarregados-locais-franca": {"descricao": "Encarregado Local", "secao": "musica"},
+  "encarregados-locais-regiao": {"descricao": "Encarregado Local", "secao": "musica"},
+  "examinadoras": {"descricao": "Examinadora", "secao": "musica"}
 } as {
-  [key: string]: string
+  [key: string]: any
 }
 
 class ChurchDetails extends React.Component<{}, State> {
@@ -80,7 +80,7 @@ class ChurchDetails extends React.Component<{}, State> {
     let ref = await firebase.database().ref(`/lista-telefones`).once('value');
     let keys = ["anciaes", "diaconos", "cooperadores-franca", "cooperadores-regiao", "cooperadores-rjm-franca", "cooperadores-rjm-regiao", "encarregados-locais-franca", "encarregados-locais-regiao", "encarregados-regionais", "examinadoras"];
     keys.forEach(key => {
-      let childs = ref.val()[key];
+      let childs = ref.val()[ministersPtBr[key]["secao"]][key];
       for (let i in childs) {
         if (
           (church.place !== "Franca - SP" && 
@@ -88,8 +88,8 @@ class ChurchDetails extends React.Component<{}, State> {
           (childs[i]["comum"] === church.name)
         ) {
           let obj = childs[i];
-          obj["type"] = ministersPtBr[key];
-          ministers.push(obj)
+          obj["type"] = ministersPtBr[key]["descricao"];
+          ministers.push(obj);
         }
       }
     });
@@ -139,6 +139,10 @@ class ChurchDetails extends React.Component<{}, State> {
 
               <IonItem>
                 <p>Ensaios: {(this.state.church.rehearsals) ? this.state.church.rehearsals.description : null}</p>
+              </IonItem>
+
+              <IonItem href={this.state.church.location} target="_blank">
+                <p>Como chegar?</p>
               </IonItem>
 
             </IonItemGroup>
