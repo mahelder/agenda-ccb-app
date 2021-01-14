@@ -38,7 +38,7 @@ class Agendas extends React.Component<{}, State> {
   constructor(props: any) {
     super(props);
     this.state = {
-      activeMonths: [monthsPtBr[new Date().getMonth()]],
+      activeMonths: [months[new Date().getMonth()]],
       agendas: {},
       loading: true,
       details: {},

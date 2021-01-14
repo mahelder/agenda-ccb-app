@@ -23,6 +23,7 @@ import MinisterDetails from './MinisterDetails';
 type State = {
   church: { [index: string]: any },
   ministers: any[],
+  musicMinisters: any[],
   loading: boolean,
   id: string,
   details: { [index: string]: any },
@@ -51,6 +52,7 @@ class ChurchDetails extends React.Component<{}, State> {
     this.state = {
       church: {},
       ministers: [],
+      musicMinisters: [],
       loading: true,
       id: props.match.params.id,
       details: {},
@@ -77,29 +79,32 @@ class ChurchDetails extends React.Component<{}, State> {
   async loadMinisters() {
     let church = this.state.church;
     let ministers = this.state.ministers;
+    let musicMinisters = this.state.musicMinisters;
     let ref = await firebase.database().ref(`/lista-telefones`).once('value');
     let keys = ["anciaes", "diaconos", "cooperadores-franca", "cooperadores-regiao", "cooperadores-rjm-franca", "cooperadores-rjm-regiao", "encarregados-locais-franca", "encarregados-locais-regiao", "encarregados-regionais", "examinadoras"];
     keys.forEach(key => {
       let childs = ref.val()[ministersPtBr[key]["secao"]][key];
       for (let i in childs) {
         if (
-          (church.place !== "Franca - SP" && 
-          childs[i]["comum"] === `${church.name} / ${church.place}`) ||
-          (childs[i]["comum"] === church.name)
+            (church.place !== "Franca - SP" && childs[i]["comum"] === `${church.name} / ${church.place}` || (childs[i]["outrasComuns"] !== undefined && childs[i]["outrasComuns"].includes(`${church.name} / ${church.place}`))) ||
+            (childs[i]["comum"] === church.name || (childs[i]["outrasComuns"] !== undefined && childs[i]["outrasComuns"].includes(church.name)))
         ) {
           let obj = childs[i];
           obj["type"] = ministersPtBr[key]["descricao"];
-          ministers.push(obj);
+          
+          if (ministersPtBr[key]["secao"] === "ministerio")
+            ministers.push(obj);
+          else
+            musicMinisters.push(obj);
         }
       }
     });
 
-    this.setState({ ministers });
+    this.setState({ ministers, musicMinisters });
   }
 
-  createListMinisters() {    
+  createListMinisters(ministers: any) {    
     let html = [];
-    let ministers = this.state.ministers;
     for (let index in ministers) {
       html.push(
         <IonItem key={index} onClick={() => this.setState({open: true, details: ministers[index]})}>
@@ -152,7 +157,16 @@ class ChurchDetails extends React.Component<{}, State> {
                 <IonLabel>Ministério Local</IonLabel>
               </IonItemDivider>
 
-              {this.createListMinisters()}
+              {this.createListMinisters(this.state.ministers)}
+
+            </IonItemGroup>
+
+            <IonItemGroup>
+              <IonItemDivider>
+                <IonLabel>Ministério Musical</IonLabel>
+              </IonItemDivider>
+
+              {this.createListMinisters(this.state.musicMinisters)}
 
             </IonItemGroup>
           </IonList>
