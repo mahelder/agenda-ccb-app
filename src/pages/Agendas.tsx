@@ -100,24 +100,34 @@ class Agendas extends React.Component<{}, State> {
   createListItems(month: string) {
     let html: any[] = [];
     let agendas = this.state.agendas;
-    for (let agenda in agendas[month]) {
-      if (agenda !== "description"){
-        let diff = moment(agendas[month][agenda].date).diff(moment(), 'days')
-        let color = ((diff > -1) && (diff < 4)) ? "danger" : "";
-        html.push(
-          <IonItem 
-            key={agenda} 
-            style={(!this.state.activeMonths.includes(month)) ? { "display": 'None' } : { "display": 'inherit' }}
-            onClick={() => this.setState({open: true, details: agendas[month][agenda]})}  
-          >
-            <IonLabel color={color}>
-              {moment(agendas[month][agenda].date).format("DD/MM/YYYY")} - {agendas[month][agenda].time} - {agendas[month][agenda].name}
-            </IonLabel>
-          </IonItem>
-        );
+    let monthAgendas = [];
+    
+    for(let agenda in agendas[month]){
+      if(agenda !== "description") {
+        monthAgendas.push(agendas[month][agenda])
       }
-      
     }
+
+    monthAgendas.sort(function(a,b) {
+      return (a.date > b.date) ? 1 : ((b.date > a.date) ? -1 : 0)
+    });
+
+    monthAgendas.forEach((agenda, index) => {
+      let diff = moment(agenda.date).diff(moment(), 'days')
+      let color = ((diff > -1) && (diff < 4)) ? "danger" : "";
+      html.push(
+        <IonItem 
+          key={index} 
+          style={(!this.state.activeMonths.includes(month)) ? { "display": 'None' } : { "display": 'inherit' }}
+          onClick={() => this.setState({open: true, details: agenda})}  
+        >
+          <IonLabel color={color}>
+            {moment(agenda.date).format("DD/MM/YYYY")} - {agenda.time} - {agenda.name}
+          </IonLabel>
+        </IonItem>
+      );
+    });
+
     return html;
   }
 
@@ -126,7 +136,7 @@ class Agendas extends React.Component<{}, State> {
       <IonPage>
         <IonHeader>
           <IonToolbar>
-            <IonTitle>Calendário 2020</IonTitle>
+            <IonTitle>Calendário {moment().year()}</IonTitle>
           </IonToolbar>
         </IonHeader>
         <IonContent>
@@ -137,10 +147,13 @@ class Agendas extends React.Component<{}, State> {
           >
             <IonHeader>
               <IonToolbar>
-                <IonTitle>{this.state.details.name}</IonTitle>
+                <IonTitle>Detalhes da Reunião</IonTitle>
               </IonToolbar>
             </IonHeader>
             <IonContent>
+              <IonItem>
+                Título: {this.state.details.name}
+              </IonItem>
               <IonItem>
                 Data e Horário: {moment(this.state.details.date).format("DD/MM/YYYY")} {this.state.details.time}
               </IonItem>
