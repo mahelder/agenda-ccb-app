@@ -62,6 +62,16 @@ class Churches extends React.Component<any, State> {
       churches[element.key]['key'] = element.key
     });
 
+    churches = Object.fromEntries(
+      Object.entries(churches).sort(([,a],[,b]) => { 
+        let orderA = a.order ? parseInt(a.order) : Number.MAX_SAFE_INTEGER;
+        let orderB = b.order ? parseInt(b.order) : Number.MAX_SAFE_INTEGER;
+        if (orderA > orderB) return 1;
+        if (orderA < orderB) return -1;
+        return a.place.localeCompare(b.place) || a.name.localeCompare(b.name);
+      })
+    );
+
     this.setState({ churches, churchesShown: churches, loading: false });
   }
 

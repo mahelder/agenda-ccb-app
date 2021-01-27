@@ -85,10 +85,22 @@ class ChurchDetails extends React.Component<{}, State> {
     keys.forEach(key => {
       let childs = ref.val()[ministersPtBr[key]["secao"]][key];
       for (let i in childs) {
-        if (
-            (church.place !== "Franca - SP" && childs[i]["comum"] === `${church.name} / ${church.place}` || (childs[i]["outrasComuns"] !== undefined && childs[i]["outrasComuns"].includes(`${church.name} / ${church.place}`))) ||
-            (childs[i]["comum"] === church.name || (childs[i]["outrasComuns"] !== undefined && childs[i]["outrasComuns"].includes(church.name)))
-        ) {
+        let insert = false;
+        if (church.place !== "Franca - SP") {
+          if (childs[i]["comum"] === `${church.name} / ${church.place}`)
+            insert = true;
+          if (childs[i]["outrasComuns"] !== undefined && childs[i]["outrasComuns"].includes(`${church.name} / ${church.place}`))
+            insert = true;
+        } else {
+          if (childs[i]["comum"] === church.name)
+            insert = true;
+
+          if (childs[i]["outrasComuns"] !== undefined && childs[i]["outrasComuns"].includes(church.name))
+            insert = true;
+
+        }        
+
+        if (insert) {
           let obj = childs[i];
           obj["type"] = ministersPtBr[key]["descricao"];
           

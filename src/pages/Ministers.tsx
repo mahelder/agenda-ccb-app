@@ -55,12 +55,16 @@ class Ministers extends React.Component<{}, State> {
     var listKeys: any[] = [];
     firebase.database().ref(`/lista-telefones/${section}`).on('value', (ref) => {
       ref.forEach((cargo: any) => {
-        if(cargo.key !== "descricao"){
+        if(cargo.key !== "descricao" && cargo.key !== "order"){
           ministers[cargo.key] = {"descricao": cargo.val()["descricao"], "voluntarios": []};
-          listKeys.push({"descricao": cargo.val()["descricao"], "key": cargo.key});
+          listKeys.push({
+            "descricao": cargo.val()["descricao"], 
+            "key": cargo.key,
+            "order": cargo.val()["order"] ? parseInt(cargo.val()["order"]) : Number.MAX_SAFE_INTEGER
+          });
 
           cargo.forEach((voluntary: any) => {
-            if(voluntary.val() !== cargo.val()["descricao"]){
+            if(voluntary.val() !== cargo.val()["descricao"] && voluntary.val() !== cargo.val()["order"]){
               ministers[cargo.key]["voluntarios"].push(voluntary);
             }
           });
@@ -68,7 +72,9 @@ class Ministers extends React.Component<{}, State> {
       });
 
       listKeys.sort(function(a,b) {
-          return (a.descricao > b.descricao) ? 1 : ((b.descricao > a.descricao) ? -1 : 0)
+          if (a.order > b.order) return 1;
+          if (a.order < b.order) return -1;
+          return a.descricao.localeCompare(b.descricao);
       });
 
       this.setState({ ministers, ministersShown: ministers, listKeys, loading: false });
@@ -117,7 +123,11 @@ class Ministers extends React.Component<{}, State> {
     let _this = this;
 
     voluntarios.sort(function(a: any, b: any) {
-      return (a.val()["nome"] > b.val()["nome"]) ? 1 : ((b.val()["nome"] > a.val()["nome"]) ? -1 : 0)
+      let orderA = a.val()["order"] ? parseInt(a.val()["order"]) : Number.MAX_SAFE_INTEGER;
+      let orderB = b.val()["order"] ? parseInt(b.val()["order"])   : Number.MAX_SAFE_INTEGER;
+      if (orderA > orderB) return 1;
+      if (orderA < orderB) return -1;
+      return a.val()["nome"].localeCompare(b.val()["nome"]);
     });
     
     voluntarios.forEach(function (x: any) {
