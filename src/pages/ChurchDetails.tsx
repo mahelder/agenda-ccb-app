@@ -149,6 +149,12 @@ class ChurchDetails extends React.Component<{}, State> {
               <IonItemDivider>
                 <IonLabel>Serviços</IonLabel>
               </IonItemDivider>
+              
+              {this.state.church.code &&
+                <IonItem>
+                  <p>Código: {this.state.church.code}</p>
+                </IonItem>
+              }
 
               <IonItem>
                 <p>Cultos: {this.state.church.cults}</p>
