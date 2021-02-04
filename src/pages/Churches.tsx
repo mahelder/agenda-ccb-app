@@ -90,6 +90,7 @@ class Churches extends React.Component<any, State> {
             </IonCardHeader>
             <IonCardContent>
               <p>Cultos: {churches[church].cults}</p>
+              <p>{churches[church].code ? `Código: ${churches[church].code}` : ""}</p>
             </IonCardContent>
           </IonCard>
         </IonItem>
