@@ -10,6 +10,7 @@ import {
   IonCol,
   IonGrid,
   IonRow,
+  IonLabel
 } from '@ionic/react';
 
 type State = {
@@ -19,6 +20,17 @@ type State = {
 };
 
 class MinisterDetails extends React.Component<State, {}> {
+
+  createLinkPhone(phone: any) {
+    let newPhone = phone ? phone : "";
+    newPhone = newPhone.split("/");
+
+    let links = newPhone.map((fone: any) => 
+      <a style={{marginRight: 10, color: "black"}} href={`tel:${fone.trim()}`}>{fone.trim()}</a>
+    );
+
+    return links;
+  }
 
   render() {
     return (
@@ -34,13 +46,13 @@ class MinisterDetails extends React.Component<State, {}> {
         <IonContent>
           {this.props.details.hasOwnProperty("telefone1") &&
             <IonItem>
-                Telefone 1: {this.props.details.telefone1}
+                <IonLabel>Telefone 1: {this.createLinkPhone(this.props.details.telefone1)}</IonLabel>                
             </IonItem>
           }
           
           {this.props.details.hasOwnProperty("telefone2") &&
             <IonItem>
-                Telefone 2: {this.props.details.telefone2}
+                <IonLabel>Telefone 2: {this.createLinkPhone(this.props.details.telefone2)}</IonLabel>
             </IonItem>
           }
 
