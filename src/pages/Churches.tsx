@@ -28,7 +28,9 @@ type State = {
   churchesShown: { [index: string]: any },
   filters: { [index: string]: any },
   loading: boolean,
-  showModal: boolean
+  showModal: boolean,
+  selectedAdm: string,
+  selectedAdmDescription: string,
 };
 
 class Churches extends React.Component<any, State> {
@@ -42,7 +44,9 @@ class Churches extends React.Component<any, State> {
         events: []
       },
       loading: true,
-      showModal: false
+      showModal: false,
+      selectedAdm: window.localStorage['adm'] ? window.localStorage['adm'] : "franca",
+      selectedAdmDescription: window.localStorage['adm:description'] ? window.localStorage['adm:description'] : "Franca",
     }
     this.search = this.search.bind(this);
   }
@@ -52,7 +56,7 @@ class Churches extends React.Component<any, State> {
   }
 
   loadChurches() {
-    firebase.database().ref(`/churches`).on('value', (churches) => this.addListChurches(churches));
+    firebase.database().ref(`/regionais/ribeirao-preto/dados/${this.state.selectedAdm}/churches`).on('value', (churches) => this.addListChurches(churches));
   }
 
   async addListChurches(entity: any) {
@@ -130,7 +134,7 @@ class Churches extends React.Component<any, State> {
             <IonButton slot="start" fill="clear" onClick={() => this.showModal()}>
               <IonIcon slot="icon-only" icon={search}></IonIcon>
             </IonButton>
-            <IonTitle>Franca-SP e Região</IonTitle>
+            <IonTitle>{this.state.selectedAdmDescription} e Região</IonTitle>
           </IonToolbar>
         </IonHeader>
 

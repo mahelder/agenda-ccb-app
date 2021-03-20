@@ -28,6 +28,7 @@ type State = {
   id: string,
   details: { [index: string]: any },
   open: boolean,
+  selectedAdm: string
 };
 
 const ministersPtBr = {
@@ -57,12 +58,13 @@ class ChurchDetails extends React.Component<{}, State> {
       id: props.match.params.id,
       details: {},
       open: false,
+      selectedAdm: window.localStorage['adm'] ? window.localStorage['adm'] : "franca",
     }
     this.closeMinisterDetails = this.closeMinisterDetails.bind(this);
   }
 
   async ionViewWillEnter() {
-    await this.loadChurch(this.state.id);
+    await this.loadChurch(this.state.selectedAdm, this.state.id);
     this.loadMinisters();
   }
 
@@ -70,8 +72,8 @@ class ChurchDetails extends React.Component<{}, State> {
     this.setState({open: false});
   }
 
-  async loadChurch(key: string) {
-    let church = await firebase.database().ref(`/churches/${key}`).once('value');
+  async loadChurch(adm:string, key: string) {
+    let church = await firebase.database().ref(`/regionais/ribeirao-preto/dados/${adm}/churches/${key}`).once('value');
     let churchDetail = church.val();
     this.setState({ church: churchDetail, loading: false });
   }
@@ -80,7 +82,7 @@ class ChurchDetails extends React.Component<{}, State> {
     let church = this.state.church;
     let ministers = this.state.ministers;
     let musicMinisters = this.state.musicMinisters;
-    let ref = await firebase.database().ref(`/lista-telefones`).once('value');
+    let ref = await firebase.database().ref(`/regionais/ribeirao-preto/dados/${this.state.selectedAdm}/lista-telefones`).once('value');
     let keys = ["anciaes", "diaconos", "cooperadores-franca", "cooperadores-regiao", "cooperadores-rjm-franca", "cooperadores-rjm-regiao", "encarregados-locais-franca", "encarregados-locais-regiao", "encarregados-regionais", "examinadoras"];
     keys.forEach(key => {
       let childs = ref.val()[ministersPtBr[key]["secao"]][key];

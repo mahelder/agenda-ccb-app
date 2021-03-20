@@ -31,6 +31,8 @@ type State = {
   loading: boolean,
   details: { [index: string]: any },
   open: boolean,
+  selectedAdm: string,
+  selectedAdmDescription: string,
 };
 
 class Agendas extends React.Component<{}, State> {
@@ -43,6 +45,8 @@ class Agendas extends React.Component<{}, State> {
       loading: true,
       details: {},
       open: false,
+      selectedAdm: window.localStorage['adm'] ? window.localStorage['adm'] : "franca",
+      selectedAdmDescription: window.localStorage['adm:description'] ? window.localStorage['adm:description'] : "Franca",
     }
     this.createListItems = this.createListItems.bind(this);
   }
@@ -52,7 +56,7 @@ class Agendas extends React.Component<{}, State> {
   }
 
   loadAgendas() {
-    firebase.database().ref(`/agendas/ministeriais`).on('value', (agendas) => this.addListAgendas(agendas));
+    firebase.database().ref(`/regionais/ribeirao-preto/dados/${this.state.selectedAdm}/agendas/ministeriais`).on('value', (agendas) => this.addListAgendas(agendas));
   }
 
   addListAgendas(entity: any) {
@@ -136,7 +140,7 @@ class Agendas extends React.Component<{}, State> {
       <IonPage>
         <IonHeader>
           <IonToolbar>
-            <IonTitle>Calendário {moment().year()}</IonTitle>
+            <IonTitle>Calendário {moment().year()} - {this.state.selectedAdmDescription}</IonTitle>
           </IonToolbar>
         </IonHeader>
         <IonContent>

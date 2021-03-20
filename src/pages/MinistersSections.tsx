@@ -23,6 +23,8 @@ type State = {
   loading: boolean,
   searchbar: null,
   open: boolean,
+  selectedAdm: string,
+  selectedAdmDescription: string
 };
 class MinistersSections extends React.Component<{}, State> {
 
@@ -36,6 +38,8 @@ class MinistersSections extends React.Component<{}, State> {
       loading: true,
       searchbar: null,
       open: false,
+      selectedAdm: window.localStorage['adm'] ? window.localStorage['adm'] : "franca",
+      selectedAdmDescription: window.localStorage['adm:description'] ? window.localStorage['adm:description'] : "Franca",
     }
   }
 
@@ -46,7 +50,7 @@ class MinistersSections extends React.Component<{}, State> {
   loadVolunteers() {
     var sections: {[k: string]: any} = {};
     var listKeys: any[] = [];
-    firebase.database().ref('/lista-telefones').on('value', (ref) => {
+    firebase.database().ref(`/regionais/ribeirao-preto/dados/${this.state.selectedAdm}/lista-telefones`).on('value', (ref) => {
       ref.forEach((section: any) => {
         sections[section.key] = {"descricao": section.val()["descricao"], "cargos": []};
         listKeys.push({"descricao": section.val()["descricao"], "key": section.key});
@@ -107,7 +111,7 @@ class MinistersSections extends React.Component<{}, State> {
       <IonPage>
         <IonHeader>
           <IonToolbar>
-            <IonTitle>Lista Telefônica</IonTitle>
+            <IonTitle>Lista Telefônica - {this.state.selectedAdmDescription}</IonTitle>
           </IonToolbar>
         </IonHeader>
         <IonContent>
