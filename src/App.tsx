@@ -16,6 +16,7 @@ import Ministers from './pages/Ministers';
 import Agendas from './pages/Agendas';
 import ChurchDetails from './pages/ChurchDetails';
 import Adms from './pages/Adms';
+import List from './pages/List';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -50,6 +51,7 @@ class App extends React.Component<{}, {}> {
               <Route path="/ministers" component={MinistersSections} exact={true} />
               <Route path="/ministers/:section" component={Ministers} exact={true} />
               <Route path="/agendas" component={Agendas} exact={true} />
+              <Route path="/list" component={List} exact={true} />
               <Route path="/" render={() => <Redirect to="/adms"/>} exact={true} />
             </IonRouterOutlet>
 

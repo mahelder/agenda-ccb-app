@@ -16,6 +16,7 @@ import {
 } from '@ionic/react';
 import firebase from 'firebase';
 import MinisterDetails from './MinisterDetails';
+var _ = require('lodash/lang');
 
 type State = {
   ministers: { [index: string]: any },
@@ -147,7 +148,7 @@ class Ministers extends React.Component<{}, State> {
   search(input: any) {
     this.setState({ loading: true });
     let search = input.detail.value.toLowerCase();
-    let ministers = this.state.ministers;
+    let ministers = _.cloneDeep(this.state.ministers);
     for (let cargo in ministers){
       ministers[cargo]["voluntarios"] = ministers[cargo]["voluntarios"].filter((x: any) => x.val().nome.toLowerCase().includes(search))
     }
