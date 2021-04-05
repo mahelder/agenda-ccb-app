@@ -165,7 +165,7 @@ class List extends React.Component<{}, State> {
       <IonPage>
         <IonHeader>
           <IonToolbar>
-            <IonTitle>Lista de Serviços {moment().year()}</IonTitle>
+            <IonTitle>Batismos e Diversos {moment().year()}</IonTitle>
             <IonButton slot="end" fill="clear" onClick={() => this.showModal()}>
               <IonIcon slot="icon-only" icon={search}></IonIcon>
             </IonButton>

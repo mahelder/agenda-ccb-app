@@ -51,6 +51,11 @@ class Adms extends React.Component<{}, State> {
                 return a.value.localeCompare(b.value);
             });
 
+            if (window.localStorage['adm'] === undefined && window.localStorage['adm'] === null){
+                window.localStorage['adm'] = adms[0].key;
+                window.localStorage['adm:description'] = adms[0].value;
+            }
+
             this.setState({ adms, loading: false });
         });
 
@@ -61,7 +66,7 @@ class Adms extends React.Component<{}, State> {
             this.setState({selected: value});
             let selectedAdm = this.state.adms.filter(x => x.key === value);
             window.localStorage['adm'] = value;
-            window.localStorage['adm:description'] = selectedAdm[0].value   
+            window.localStorage['adm:description'] = selectedAdm[0].value
         }
     }
 
