@@ -104,6 +104,7 @@ class ChurchDetails extends React.Component<{}, State> {
 
         if (insert) {
           let obj = childs[i];
+          obj['typeKey'] = key;
           obj["type"] = ministersPtBr[key]["descricao"];
           
           if (ministersPtBr[key]["secao"] === "ministerio")
@@ -112,6 +113,30 @@ class ChurchDetails extends React.Component<{}, State> {
             musicMinisters.push(obj);
         }
       }
+    });
+
+    ministers.sort((a, b) => {  
+      if (keys.indexOf(a.typeKey) > keys.indexOf(b.typeKey)) return 1;
+      if (keys.indexOf(a.typeKey) < keys.indexOf(b.typeKey)) return -1;
+
+      let orderA = a.order ? parseInt(a.order) : Number.MAX_SAFE_INTEGER;
+      let orderB = b.order ? parseInt(b.order) : Number.MAX_SAFE_INTEGER;
+      if (orderA > orderB) return 1;
+      if (orderA < orderB) return -1;
+      return a.nome.localeCompare(b.nome);
+      
+    });
+
+    musicMinisters.sort((a, b) => {  
+      if (keys.indexOf(a.typeKey) > keys.indexOf(b.typeKey)) return 1;
+      if (keys.indexOf(a.typeKey) < keys.indexOf(b.typeKey)) return -1;
+
+      let orderA = a.order ? parseInt(a.order) : Number.MAX_SAFE_INTEGER;
+      let orderB = b.order ? parseInt(b.order) : Number.MAX_SAFE_INTEGER;
+      if (orderA > orderB) return 1;
+      if (orderA < orderB) return -1;
+      return a.nome.localeCompare(b.nome);
+      
     });
 
     this.setState({ ministers, musicMinisters });
