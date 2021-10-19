@@ -97,6 +97,10 @@ class Agendas extends React.Component<{}, State> {
 
   }
 
+  openModal(agenda: any){
+    this.setState({open: true, details: agenda})
+  }
+
   createListItems(month: string) {
     let html: any[] = [];
     let agendas = this.state.agendas;
@@ -119,7 +123,7 @@ class Agendas extends React.Component<{}, State> {
         <IonItem 
           key={index} 
           style={(!this.state.activeMonths.includes(month)) ? { "display": 'None' } : { "display": 'inherit' }}
-          onClick={() => this.setState({open: true, details: agenda})}  
+          onClick={() => this.openModal(agenda)}  
         >
           <IonLabel color={color}>
             {moment(agenda.date).format("DD/MM/YYYY")} - {agenda.time} - {agenda.name}
@@ -144,6 +148,7 @@ class Agendas extends React.Component<{}, State> {
           <IonModal
             isOpen={this.state.open}
             cssClass='my-custom-class'
+            onDidDismiss={() => this.setState({ open: false })}
           >
             <IonHeader>
               <IonToolbar>
