@@ -29,6 +29,7 @@ const days = {
   "3T": "Terça-feira (tarde)",
   "3N": "Terça-feira",
   "4N": "Quarta-feira",
+  "5T": "Quinta-feira (tarde)",
   "5N": "Quinta-feira",
   "6N": "Sexta-feira",
   "SN": "Sábado",
