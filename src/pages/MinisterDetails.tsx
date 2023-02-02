@@ -44,18 +44,6 @@ class MinisterDetails extends React.Component<State, {}> {
           </IonToolbar>
         </IonHeader>
         <IonContent>
-          {this.props.details.hasOwnProperty("telefone1") &&
-            <IonItem>
-                <IonLabel>Telefone 1: {this.createLinkPhone(this.props.details.telefone1)}</IonLabel>                
-            </IonItem>
-          }
-          
-          {this.props.details.hasOwnProperty("telefone2") &&
-            <IonItem>
-                <IonLabel>Telefone 2: {this.createLinkPhone(this.props.details.telefone2)}</IonLabel>
-            </IonItem>
-          }
-
           {this.props.details.hasOwnProperty("comum") &&
             <IonItem>
                 Comum Congregação: {this.props.details.comum}
