@@ -34,7 +34,10 @@ const days = {
   "6N": "Sexta-feira",
   "SN": "Sábado",
   "DN": "Domingo",
-  "RJM-DM": "Domingo (manhã)"
+  "RJM-DM": "RJM Domingo (manhã)",
+  "RJM-DT": "RJM Domingo (tarde)",
+  "RJM-SN": "RJM Sábado",
+  "RJM-6N": "RJM Sexta-feira"
 } as {
   [key: string]: string
 }
