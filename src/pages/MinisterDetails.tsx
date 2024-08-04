@@ -10,7 +10,6 @@ import {
   IonCol,
   IonGrid,
   IonRow,
-  IonLabel
 } from '@ionic/react';
 
 type State = {

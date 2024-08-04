@@ -189,6 +189,14 @@ class ChurchDetails extends React.Component<{}, State> {
                 <p>Ensaios: {(this.state.church.rehearsals) ? this.state.church.rehearsals.description : null}</p>
               </IonItem>
 
+              <IonItem>
+                <p>Reunião de Crianças: {(this.state.church.rc) ? "Sim" : "Não"}</p>
+              </IonItem>
+
+              <IonItem>
+                <p>Libras: {(this.state.church.libras) ? this.state.church.libras : "Não"}</p>
+              </IonItem>
+
               <IonItem href={this.state.church.location} target="_blank">
                 <p>Como chegar?</p>
               </IonItem>
