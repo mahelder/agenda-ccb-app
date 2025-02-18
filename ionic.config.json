@@ -1,0 +1,7 @@
+{
+  "name": "agenda-ccb-app-v2",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react-vite"
+}
