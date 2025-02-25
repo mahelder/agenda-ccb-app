@@ -23,7 +23,6 @@ const Ministers: React.FC = () => {
   const [ministersShown, setMinistersShown] = useState<{ [key: string]: any }>({});
   const [details, setDetails] = useState<{ [key: string]: any }>({});
   const [actives, setActives] = useState<any[]>([]);
-  const [listKeys, setListKeys] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [open, setOpen] = useState(false);
   const { section } = useParams<{ section: string }>()
@@ -33,21 +32,17 @@ const Ministers: React.FC = () => {
   });
 
   const loadVolunteers = (section: string) => {
-    const ministersData: { [key: string]: any } = {};
-    const listKeysData: any[] = [];
-
+    let ministersData: { [key: string]: any } = {};
     const db = getDatabase();
     const sectionRef = ref(db, `/lista-telefones/${section}`);
     onValue(sectionRef, (snapshot) => {
       snapshot.forEach((cargo: any) => {
         if (cargo.key !== 'descricao' && cargo.key !== 'order') {
-          ministersData[cargo.key] = { descricao: cargo.val()['descricao'], voluntarios: [] };
-          listKeysData.push({
-            descricao: cargo.val()['descricao'],
-            key: cargo.key,
-            order: cargo.val()['order'] ? parseInt(cargo.val()['order']) : Number.MAX_SAFE_INTEGER,
-          });
-
+          ministersData[cargo.key] = { 
+            'descricao': cargo.val()['descricao'], 
+            'voluntarios': [], 
+            'order': cargo.val()['order'] ? parseInt(cargo.val()['order']) : Number.MAX_SAFE_INTEGER 
+          };
           cargo.forEach((voluntary: any) => {
             if (voluntary.val() !== cargo.val()['descricao'] && voluntary.val() !== cargo.val()['order']) {
               ministersData[cargo.key]['voluntarios'].push(voluntary);
@@ -56,15 +51,16 @@ const Ministers: React.FC = () => {
         }
       });
 
-      listKeysData.sort((a, b) => {
-        if (a.order > b.order) return 1;
-        if (a.order < b.order) return -1;
-        return a.descricao.localeCompare(b.descricao);
-      });
+      ministersData = Object.fromEntries(
+        Object.entries(ministersData).sort(([,a],[,b]) => { 
+          if (a.order > b.order) return 1;
+          if (a.order < b.order) return -1;
+          return a.descricao.localeCompare(b.descricao);
+        })
+      );
 
       setMinisters(ministersData);
       setMinistersShown(ministersData);
-      setListKeys(listKeysData);
       setLoading(false);
     });
   };
@@ -84,18 +80,19 @@ const Ministers: React.FC = () => {
   };
 
   const createList = () => {
-    return listKeys.map((x) => {
-      if (ministers[x.key] !== undefined) {
-        return (
-          <IonItemGroup key={x.key}>
-            <IonItemDivider onClick={() => setActivesHandler(x.key)}>
-              <IonLabel>{ministers[x.key]['descricao']}</IonLabel>
-            </IonItemDivider>
-            {createListItems(ministers[x.key]['voluntarios'], x.key)}
-          </IonItemGroup>
-        );
-      }
-    });
+    let html = []
+    let ministersFiltered = ministersShown;
+    for (let key in ministersFiltered) {
+      html.push(
+        <IonItemGroup key={key}>
+          <IonItemDivider onClick={() => setActivesHandler(key)}>
+            <IonLabel>{ministersFiltered[key]["descricao"]}</IonLabel>
+          </IonItemDivider>
+          {createListItems(ministersFiltered[key]["voluntarios"], key)}
+        </IonItemGroup>
+      )
+    }
+    return html;
   };
 
   const createListItems = (voluntarios: any, key: string) => {
@@ -119,10 +116,16 @@ const Ministers: React.FC = () => {
   const search = (input: any) => {
     setLoading(true);
     const searchValue = input.detail.value.toLowerCase();
-    const filteredMinisters = { ...ministers };
+    let filteredMinisters: { [key: string]: any } = {};
 
-    for (let cargo in filteredMinisters) {
-      filteredMinisters[cargo]['voluntarios'] = filteredMinisters[cargo]['voluntarios'].filter((x: any) =>
+    for (let cargo in ministers) {
+      if (!filteredMinisters[cargo]){
+        filteredMinisters[cargo] = {
+          'descricao': ministers[cargo]['descricao'], 
+          'order': ministers[cargo]['order']
+        };
+      }
+      filteredMinisters[cargo]['voluntarios'] = ministers[cargo]['voluntarios'].filter((x: any) =>
         x.val().nome.toLowerCase().includes(searchValue)
       );
     }
@@ -141,7 +144,7 @@ const Ministers: React.FC = () => {
       <IonContent>
         <IonLoading isOpen={loading} />
         <MinisterDetails open={open} details={details} close={closeMinisterDetails} />
-        <IonSearchbar placeholder="Busque por nome" onIonChange={search} />
+        <IonSearchbar placeholder="Busque por nome" onIonInput={search} />
         <IonList>{createList()}</IonList>
       </IonContent>
     </IonPage>
