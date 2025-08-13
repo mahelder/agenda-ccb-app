@@ -98,15 +98,45 @@ const ChurchDetails: React.FC = () => {
         }
       });
 
+      const typeOrderMinisters = {
+        'Ancião': 1,
+        'Diácono': 2,
+        'Cooperador': 3,
+        'Cooperador RJM': 4
+      };
+
       allMinisters.sort((a, b) => {
+
+        const typeA = typeOrderMinisters[a.type as keyof typeof typeOrderMinisters] || Number.MAX_SAFE_INTEGER;
+        const typeB = typeOrderMinisters[b.type as keyof typeof typeOrderMinisters] || Number.MAX_SAFE_INTEGER;
+
+        if (typeA !== typeB) {
+          return typeA - typeB;
+        }
+
         let orderA = a.order ? parseInt(a.order) : Number.MAX_SAFE_INTEGER;
         let orderB = b.order ? parseInt(b.order) : Number.MAX_SAFE_INTEGER;
+
         return orderA - orderB || a.nome.localeCompare(b.nome);
       });
 
+      const typeOrderMusicMinisters = {
+        'Encarregado Regional': 1,
+        'Encarregado Local': 2,
+        'Examinadora': 3
+      };
+
       allMusicMinisters.sort((a, b) => {
+        const typeA = typeOrderMusicMinisters[a.type as keyof typeof typeOrderMusicMinisters] ?? Number.MAX_SAFE_INTEGER;
+        const typeB = typeOrderMusicMinisters[b.type as keyof typeof typeOrderMusicMinisters] ?? Number.MAX_SAFE_INTEGER;
+
+        if (typeA !== typeB) {
+          return typeA - typeB;
+        }
+
         let orderA = a.order ? parseInt(a.order) : Number.MAX_SAFE_INTEGER;
         let orderB = b.order ? parseInt(b.order) : Number.MAX_SAFE_INTEGER;
+
         return orderA - orderB || a.nome.localeCompare(b.nome);
       });
 
@@ -148,7 +178,7 @@ const ChurchDetails: React.FC = () => {
           {church.videoUrl && (
             <IonItem>
               <IonCard>
-                <video className="img-details" src={church.videoUrl} controls autoPlay muted/>
+                <video className="img-details" src={church.videoUrl} controls autoPlay muted />
               </IonCard>
             </IonItem>
           )}

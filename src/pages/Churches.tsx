@@ -15,7 +15,6 @@ import {
   IonIcon,
   IonImg
 } from '@ionic/react';
-import { useHistory } from 'react-router-dom';
 import { getDatabase, ref, onValue } from "firebase/database";
 import { useEffect, useState, useCallback } from 'react';
 import './Churches.css';
